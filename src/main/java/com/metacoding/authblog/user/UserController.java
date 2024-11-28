@@ -15,20 +15,15 @@ public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
-    @ResponseBody
-    @GetMapping("/test/auth")
-    public String testAuth() {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            return "인증안됨";
-        }
-        return "인증됨 : "+sessionUser.getUsername();
+    @PostMapping("/join")
+    public String join(UserRequest.JoinDTO joinDTO){
+        userService.회원가입(joinDTO);
+        return "redirect:/login-form";
     }
 
-    @PostMapping("/login")
-    public String login(UserRequest.LoginDTO loginDTO) {
-        User sessionUser = userService.로그인(loginDTO);
-        session.setAttribute("sessionUser", sessionUser);
-        return "redirect:/";
+    @GetMapping("/login-form")
+    public String loginForm() {
+        return "user/login-form";
     }
+
 }
